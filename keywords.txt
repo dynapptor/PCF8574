@@ -1,0 +1,34 @@
+# Classes
+PCF8574	KEYWORD1
+PCF8574inputs	KEYWORD1
+PCF8574outputs	KEYWORD1
+
+# Constants
+PCF8574_MODE_IN	LITERAL1
+PCF8574_MODE_OUT	LITERAL1
+
+# PCF8574 Methods
+begin	KEYWORD2
+getMode	KEYWORD2
+getReverse	KEYWORD2
+readBuffer	KEYWORD2
+getValues	KEYWORD2
+getLastValues	KEYWORD2
+getValue	KEYWORD2
+getLastValue	KEYWORD2
+setValues	KEYWORD2
+setValue	KEYWORD2
+getLastRead	KEYWORD2
+
+# PCF8574inputs Methods
+begin	KEYWORD2
+digitalRead	KEYWORD2
+getLastValue	KEYWORD2
+readBuffer	KEYWORD2
+
+# PCF8574outputs Methods
+begin	KEYWORD2
+digitalWrite	KEYWORD2
+getOutputValue	KEYWORD2
+writeBuffer	KEYWORD2
+getBuffer	KEYWORD2

@@ -1,0 +1,88 @@
+= PCF8574 Arduino Library
+:author: Ferenc Mayer
+:date: 2025
+
+== Overview
+
+This library controls PCF8574 I2C I/O expanders on Arduino, supporting input and output modes with event handling (e.g., clicks, holds) for multiple devices.
+
+== Features
+
+- Manage single or multiple PCF8574 devices.
+- Input: Event detection (click, double-click, hold).
+- Output: Set individual pins or buffers.
+- Logic inversion option.
+- Template-based multi-device support.
+- Callback-based event handling.
+
+== Requirements
+
+- Arduino IDE.
+- `Wire`, `Logger`, `InputBase.h`, `OutputBase.h`.
+
+== Installation
+
+1. Download the repository.
+2. Copy to Arduino `libraries` folder.
+3. Include headers: `PCF8574.h`, `PCF8574inputs.h`, `PCF8574outputs.h`.
+
+== Usage
+
+*Single PCF8574 (Input)*:
+[source,cpp]
+----
+#include <Wire.h>
+#include <PCF8574.h>
+
+PCF8574 pcf;
+
+void setup() {
+  Wire.begin();
+  pcf.begin(&Wire, 0x20, PCF8574_MODE_IN);
+}
+
+void loop() {
+  if (pcf.readBuffer()) {
+    Serial.println(pcf.getValues(), BIN);
+  }
+  delay(100);
+}
+----
+
+*Multiple PCF8574 (Input/Output with Events)*:
+[source,cpp]
+----
+#include <Wire.h>
+#include <PCF8574inputs.h>
+#include <PCF8574outputs.h>
+
+PCF8574inputs<8, 2, 0x22, 0x21> inputs;
+PCF8574outputs<8, 2, 0x24, 0x25> outputs;
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(4, 5);
+  inputs.begin(&Wire, true);
+  outputs.begin(&Wire, true);
+  inputs.setEventsEnabledForAllPins(1023);
+  inputs.setCallbackForAllPins([](uint8_t pin, uint16_t, uint16_t event, uint8_t) {
+    if (event == EVENT_CLICK) {
+      outputs.digitalWrite(pin, !outputs.getOutputValue(pin));
+    }
+  });
+}
+
+void loop() {
+  inputs.loop();
+}
+----
+
+== Files
+
+- `PCF8574.h/.cpp`: Single PCF8574 control.
+- `PCF8574inputs.h/.tpp`: Input mode with events.
+- `PCF8574outputs.h/.tpp`: Output mode control.
+
+== License
+
+MIT License. See `LICENSE` file.
